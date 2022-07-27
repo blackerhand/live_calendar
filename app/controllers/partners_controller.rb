@@ -3,7 +3,7 @@ class PartnersController < ApplicationController
 
   # 显示所有的合伙人
   def index
-    render json: Partner.all.map { |partner| partner.slice(:id, :name) }
+    render json: { status: 0, list: Partner.all.map { |partner| partner.slice(:id, :name) } }
   end
 
   private

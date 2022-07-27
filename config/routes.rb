@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   resources :free_times, only: [:index, :create, :destroy] do
     post :reserve, on: :member
   end
+
+  resources :meeting_times, only: [:index, :destroy]
 end

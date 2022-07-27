@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossOrigin="anonymous">
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossOrigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container">
+
+  <div>
+    选择时间, 显示日历:
+    <input id="selectDate" value="2022-01-01" placeholder="请选择时间">
+    <button id="showTimes">提交</button>
+    
+    <br>
+    
+    输入时间, 新增日历:
+    <input id="newDate" value="2022-01-01 10:15:00" placeholder="请选择时间">
+    <button id="addDate">新增</button>
+  </div>
+  <br>
+
+  <div id="list">
+  </div>
+  
+  <br>
+ <br>
+  <br>
+
+调用 axios, 获取时间段列表, 然后渲染
+点击新增, 调用新增接口
+调用完之后, 重新获取时间段列表
+
+</div>
+
+
+<script>
+  $(document).ready(function () {
+    $('#showTimes').click(function () {
+      var selectDate = $('#selectDate').val()
+
+      $.ajax({
+        url: './free_times?partner_id=1&query_date=' + selectDate,
+        complete: function (xhr, status) {
+          $('#list').html('')
+
+          $.each(xhr.responseJSON.list, function (index, free_time) {
+            var html = "<div class='free_time' id='" + free_time.id + "'>" + free_time.start_time + "</div>"
+            $('#list').append(html)
+          })
+        }
+      })
+    })
+
+    $('#addDate').click(function () {
+      var newDate = $('#newDate').val()
+
+      $.ajax({
+        url: './free_times?partner_id=1&start_time=' + newDate,
+        method: 'POST',
+        complete: function (xhr, status) {
+          alert(xhr.responseJSON.message)
+        }
+      })
+    })
+  });
+</script>
+</body>
+</html>

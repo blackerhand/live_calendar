@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossOrigin="anonymous">
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossOrigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container">
+
+  <div>
+       选择时间, 显示日历:
+    <input id="selectDate" value="2022-01-01" placeholder="请选择时间">
+    <button id="showTimes">提交</button>
+    
+    <br>
+    
+    获取预约列表: 点击时间进行预约
+    <button id="showMeetingTimes">提交</button>
+    
+    <br>
+  </div>
+  <br>
+
+  <div id="list">
+  </div>
+  
+  <br>
+ <br>
+  <br>
+
+获取合作者列表, 选择合作者
+获取合作者时间列表
+根据 id 进行预约
+预约完成之后, 重新渲染
+</div>
+
+
+<script>
+  $(document).ready(function () {
+    $('#showTimes').click(function () {
+      var selectDate = $('#selectDate').val()
+
+      $.ajax({
+        url: './free_times?partner_id=1&query_date=' + selectDate,
+        complete: function (xhr, status) {
+          $('#list').html('')
+
+          $.each(xhr.responseJSON.list, function (index, free_time) {
+            var html = "<div class='free_time' id='" + free_time.id + "'>" + free_time.start_time + "</div>"
+
+            $html = $(html)
+            $('#list').append($html)
+
+            console($html)
+            $html.click(function () {
+              alert(1)
+              console.log($(this))
+
+              // todo ajax
+            })
+          })
+        }
+      })
+    })
+
+    $('#showMeetingTimes').click(function () {
+      $.ajax({
+        url: './meeting_times?entrepreneur_id=1',
+        complete: function (xhr, status) {
+          $('#list').html('')
+
+          $.each(xhr.responseJSON.list, function (index, meeting_time) {
+            var html = "<div class='free_time' id='" + meeting_time.id + "'>" + meeting_time.start_time + "</div>"
+            $('#list').append(html)
+          })
+        }
+      })
+    })
+  });
+</script>
+</body>
+</html>
